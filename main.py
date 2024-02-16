@@ -155,5 +155,21 @@ survived_pclass.columns = ["class1", "class2", "class3", "rowtotal"]
 survived_pclass.index = ["died", "survived", "coltotal"]
 survived_pclass.plot(kind="bar", stacked=False)
 
+# Classes and Sex vs survived/died
+sur_sex_class = pd.crosstab(index=[titanic_data["Sex"], titanic_data["Pclass"]],
+                            columns=titanic_data["Survived"],
+                            margins=True)
+print(sur_sex_class.head(5))
+
+sur_sex_class.columns = pd.MultiIndex.from_tuples([('Survived', 'Died'), ('Survived', 'Survived'), ('', 'Total')],
+                                                  names=['', ''])
+sur_sex_class.index = pd.MultiIndex.from_tuples([('Female', 'Class 1'), ('Female', 'Class 2'), ('Female', 'Class 3'),
+                                                 ('Male', 'Class 1'), ('Male', 'Class 2'), ('Male', 'Class 3'), ('', 'Total')],
+                                                names=['Sex', 'Pclass'])
+sur_sex_class.xs('Survived', axis=1, level=0).plot(kind='bar', stacked=True)
+plt.ylabel("Count")
+plt.title("Survival by Sex and Class")
+plt.legend(title="Survived/Died")
+plt.xticks(rotation=45)
 plt.show()
 
